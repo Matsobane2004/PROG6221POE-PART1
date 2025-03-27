@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Speech" Version="10.0.0-preview.2.25163.2" />
+    <PackageReference Include="System.Windows.Extensions" Version="10.0.0-preview.2.25163.2" />
   </ItemGroup>
 
 </Project>

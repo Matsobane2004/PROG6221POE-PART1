@@ -2,20 +2,18 @@
 using System;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using System.Speech;
-using System.Speech.Synthesis;
 using System.Runtime.ConstrainedExecution;
+using System.Media;
 
 
 internal class Program
 {
-    static SpeechSynthesizer synthesizer = new SpeechSynthesizer();
-
     private static async Task Main(string[] args)
     {
-        //this boolean hepls me to keep looping th program until the user has no more questions 
-        bool loop = true;
         
+        bool loop = true; //this boolean hepls me to keep looping th program until the user has no more questions 
+
+        //the following are all the ACII codes I used to make the ChatBot's appearence
         char a = (char)47;//"/"
         char b = (char)92;//"\"
         char c = (char)45;//"-"
@@ -25,8 +23,8 @@ internal class Program
         char g = (char)126;
         char h = (char)95;//"_"
 
-        String question;
-        String userName;
+        String question;//users input to questions
+        String userName;//the users name 
 
 
         //BOT QUESTIONS 
@@ -45,7 +43,7 @@ internal class Program
         String m1 = "12.Why should I aviod using public wi-fi for sensitive transections";
 
         
-
+        //loop for the bots appearence
         for (int i = 0; i < 1; i++)
         {
             
@@ -64,14 +62,19 @@ internal class Program
             Console.ResetColor();
         }
 
-        await Task.Delay(500);
-        VoiceGreeting();
+        await Task.Delay(500);//slight delay
+        Console.WriteLine("HI IM SMILO, HERE TO HELP YOU STAY AWARE ONLINE BUT BEFORE ALL THAT CAN I GET YOUR NAME ?");//bots intro and ask for the username
 
-        Console.ForegroundColor = ConsoleColor.Green;
-        userName = Console.ReadLine();
-        Console.ResetColor();
+        SoundPlayer player = new SoundPlayer("Smilo.wav");//plays imported wav file 
+        player.Load();
+        player.PlaySync();
 
-        while (String.IsNullOrEmpty(userName)) 
+        
+        Console.ForegroundColor = ConsoleColor.Green;//changes the colour of the users input
+        userName = Console.ReadLine();//reads whatever the user entered, the name
+        Console.ResetColor();//stops the colours from being green
+
+        while (String.IsNullOrEmpty(userName))//this loop aks the user to enter a name and  keep repeating till the user enters a name
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("PLEASE ENTER A NAME!");
@@ -85,22 +88,22 @@ internal class Program
         Console.WriteLine();
 
         await Task.Delay(500);
-        String outputAns = ("NICE TO MEET YOU "+ userName.ToUpper() + " <3\n");
-        await TypeTextAsync(outputAns);
+        String outputAns = ("NICE TO MEET YOU "+ userName.ToUpper() + " <3\n");//greets the user
+        await TypeTextAsync(outputAns);//types the feedback to the user instead of just displaying
         Console.ResetColor();
 
-        await Task.Delay(200);
+        await Task.Delay(200);//delays a bit to give it a AI chat feel
         Console.WriteLine("WHAT QUESTIONS DO YOU HAVE ABOUT CYBER SECURITY, PHISHING OR SAFE BROWSING,\n I CAN ALSO SUGGEST IF YOU'D LIKE, JUST TYPE 'suggest'");
         Console.ForegroundColor = ConsoleColor.Green;
         question = Console.ReadLine();
         Console.ResetColor();
 
-        while (true)
+        while (true)//this loop continues as long as the user keeps asking the ChatBot questions, it stops when the user answers "no", when the program asks if the user has anymore questions
         {
 
             if (String.Equals(question, "How are you", (StringComparison.OrdinalIgnoreCase)) | String.Equals(question, "How are you?", (StringComparison.OrdinalIgnoreCase)))
             {
-
+            //draws the ChatBots and answers the questions
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.Write("\t" + a +  a + a + c + b + b + b + "\n");
@@ -127,7 +130,6 @@ internal class Program
                 if (String.Equals(question, "whats your purpose", (StringComparison.OrdinalIgnoreCase)) | String.Equals(question, "what's your purpose", (StringComparison.OrdinalIgnoreCase)) |
                     String.Equals(question, "whats your purpose?", (StringComparison.OrdinalIgnoreCase)) | String.Equals(question, "whats your purpose", (StringComparison.OrdinalIgnoreCase)))
                 {
-                    purposeQ = question;
                     Console.WriteLine();
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.Write("\t" + a + a + a + c + b + b + b + "\n");
@@ -143,14 +145,14 @@ internal class Program
 
                     await TypeTextAsync(purpose);
 
-                    await Task.Delay(300);
+                    await Task.Delay(300);// delays for a short time to make a typing effect
                     Console.WriteLine("\nWHAT QUESTIONS DO YOU HAVE ABOUT CYBER SECURITY, PHISHING OR SAFE BROWSING,\n I CAN ALSO SUGGEST IF YOU'D LIKE, JUST TYPE 'suggest'");
                     Console.ForegroundColor = ConsoleColor.Green;
                     question = Console.ReadLine();
                     Console.ResetColor();
                 }
 
-                while (String.IsNullOrEmpty(question))
+                while (String.IsNullOrEmpty(question))//if the question is empty then  this will pop up on the screeen to eadge the user to ask or suggest a question
                 {
                     Console.WriteLine("*PLEASE ASK A QUESTION\n I CAN SUGGEST ONES FOR YOU IF YOU DONT HAVE ANY ON YOUR MIND RIGHT NOW \n JUST TYPE 'SUGGEST'");
                     question = Console.ReadLine();
@@ -160,9 +162,10 @@ internal class Program
                 while (String.Equals(question, "suggest", StringComparison.OrdinalIgnoreCase) | (String.Equals(question, "What can I ask you?", StringComparison.OrdinalIgnoreCase)))
                 {
                     await Task.Delay(1000);
-                    Console.WriteLine("\nThinking...");
+                    Console.WriteLine("\nThinking...");// gives it a conversational look
                     await Task.Delay(1000);
                     Console.WriteLine();
+                    //shows half of the suggested questions 
                     await TypeTextAsync(a1);
                     await TypeTextAsync(b1);
                     await TypeTextAsync(c1);
@@ -178,7 +181,7 @@ internal class Program
                     Console.ResetColor();
                 }
 
-                if (question.Contains("yes"))
+                if (question.Contains("yes"))//if the user answers yes to them having another question 
                 {
 
                     Console.WriteLine("\nWhats the question :-)  : \n");
@@ -187,6 +190,9 @@ internal class Program
                     Console.ResetColor();
  
                 }
+
+
+                //The following checks if question contains any of the variables, if yes, the program will display the correct answer
                 if (question == "1")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -196,17 +202,8 @@ internal class Program
                     Console.WriteLine("\nDo you have another question for me? (yes or no)\n");
                     question = Console.ReadLine();
 
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "2")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -216,17 +213,8 @@ internal class Program
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
 
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "3")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -235,18 +223,8 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "4")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -255,18 +233,8 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "5")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -275,18 +243,8 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
+                 }
 
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
-                }
                 if (question == "6")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -295,20 +253,9 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
 
-                if ((String.Equals(question, "more", StringComparison.OrdinalIgnoreCase)))
+                if ((String.Equals(question, "more", StringComparison.OrdinalIgnoreCase)))// if the user chooses to say they want more questions, the program will display the following
                 {
 
                     Console.WriteLine();
@@ -327,18 +274,6 @@ internal class Program
                     Console.ForegroundColor = ConsoleColor.Green;
                     question = Console.ReadLine();
                     Console.ResetColor();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
-
                 }
 
                 if (question == "7")
@@ -349,18 +284,8 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "8")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -370,17 +295,8 @@ internal class Program
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
 
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "9")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -389,18 +305,8 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "10")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -409,18 +315,8 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "11")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -429,18 +325,8 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
+
                 if (question == "12")
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
@@ -449,20 +335,9 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you have another question for me? (yes or no)");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
 
-
+                //string of keywords to read what the users enters and answers the questions based on the keywords provided by the user
                 String[] keywords = new string[] { "Cyber Security", "Phishing", "Safe Browsing","cybersecurity","safebrowsing" };
 
 
@@ -475,17 +350,6 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you another question for me ? (yes or no) ");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
                 }
 
                 if (question.Contains(keywords[1], StringComparison.OrdinalIgnoreCase))
@@ -496,18 +360,6 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you another question for me ? (yes or no) ");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO")
-                    {
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
-
                 }
 
 
@@ -519,29 +371,12 @@ internal class Program
                     Console.ResetColor();
                     Console.WriteLine("\nDo you another question for me ? (yes or no) ");
                     question = Console.ReadLine();
-
-                    while (question != "Yes" | question != "yes" | question != "YES" | question != "no" | question != "No" | question != "NO" ) 
-                    {
-                     
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("\nPLEASE ENTER ONLY A NO OR YES ANSWER!");
-                        Console.ResetColor();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        question = Console.ReadLine();
-                        Console.ResetColor();
-                    }
-                }
-
-                if (question == "no" | question == "No" | question == "NO")
-                {
-                    String goodbye = ("\nThanks for using smiloAI, goodbye!");
-                    await TypeTextAsync(goodbye);
-                    Environment.Exit(0);
                 }
             }
+
             catch 
             {
-                Console.WriteLine("Sorry, I couldnt undrstand that could you try rephrasing");
+                Console.WriteLine("Sorry, I couldnt undrstand that could you try rephrasing");// of the program runs into an unexpected error, it will display the following
                 question = Console.ReadLine();
             }
 
@@ -560,21 +395,5 @@ internal class Program
         }
 
         Console.WriteLine(); // Move to the next line after the message
-    }
-
-    static void VoiceGreeting()
-    {
-        
-        string greet = "HI I'M SMILO, HERE TO HELP YOU STAY AWARE ONLINE, BUT BEFORE ALL THAT, CAN I GET YOUR NAME";
-        Console.WriteLine(greet);
-
-        try
-        {
-            synthesizer.Speak(greet);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine("Sorry, Voice couldnt run due to technical difficulties");
-        }
     }
 }
